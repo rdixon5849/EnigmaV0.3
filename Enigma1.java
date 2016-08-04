@@ -27,10 +27,8 @@ public class Enigma1
 			messageParts[i] = message.substring(i, i+1);
 		}		
 		encrypt(messageParts);
-		System.out.println();
-		decrypt(getEncryptedMsg());
-	}
-	
+		
+	}	
 	
 	private void encrypt(String[] messageParts)
 	{
@@ -38,37 +36,20 @@ public class Enigma1
 		for(int i = 0; i < messageParts.length; i++)
 		{
 			setReversed(false);
-			holder[i] = firstRotator(messageParts[i]);
-			holder[i] = secondRotator(holder[i]);
+			holder[i]= rotator(messageParts[i], rotator1);
+			holder[i]= rotator(holder[i], rotator2);
 			holder[i] = reflector1(holder[i]);
 			
 			setReversed(true);
-			holder[i] = secondRotator(holder[i]);
-			holder[i] = firstRotator(holder[i]);
+			holder[i] = rotator(holder[i], rotator2);
+			holder[i] = rotator(holder[i], rotator1);
 			System.out.print(holder[i]);
 			
 		}		
 		setEncryptedMsg(holder);
 	}
 	
-	private void decrypt(String[] messageParts)
-	{
-		String[] holder = new String[messageParts.length];
-		for(int i = 0; i < messageParts.length; i++)
-		{
-			setReversed(true);
-			holder[i] = firstRotator(messageParts[i]);
-			holder[i] = secondRotator(holder[i]);
-			holder[i] = reflectorIn(holder[i]);
-			
-			setReversed(false);			
-			holder[i] = secondRotator(holder[i]);
-			holder[i] = firstRotator(holder[i]);
-			System.out.print(holder[i]);
-		}		
-	}
-
-	private String firstRotator(String string)
+	private String rotator(String string, String[][] rotator)
 	{
 		int row = 0;
 		if(isReversed())
@@ -77,37 +58,16 @@ public class Enigma1
 		}
 		
 		//have to find the place of the string that is called in the array
-		for(int i = 0; i < rotator1[row].length; i++)
+		for(int i = 0; i < rotator[row].length; i++)
 		{
-			if(string.equalsIgnoreCase(rotator1[row][i]))
+			if(string.equalsIgnoreCase(rotator[row][i]))
 			{
-				string = rotator1[Math.abs(row-1)][i];
+				string = rotator[Math.abs(row-1)][i];
 				break;
 			}
 		}
 		return string;
 	}
-
-
-	private String secondRotator(String string)
-	{
-		int row = 0;
-		if(isReversed())
-		{
-			row = 1;
-		}
-		//have to find the place of the string that is called in the array
-		for(int i = 0; i < rotator2[row].length; i++)
-		{
-			if(string.equalsIgnoreCase(rotator2[row][i]))
-			{
-				string = rotator2[Math.abs(row-1)][i];
-				break;
-			}
-		}				
-		return string;
-	}
-
 	
 	private String reflector1(String string)
 	{
@@ -115,21 +75,6 @@ public class Enigma1
 		for(int i = 0; i < rotator1[1].length; i++)
 		{
 			if(string.equalsIgnoreCase(rotator2[1][i]))
-			{
-				string = reflector1[i];
-				break;
-			}
-		}	
-		
-		return string;
-	}
-	
-	private String reflectorIn(String string)
-	{
-		//have to find the place of the string that is called in the array
-		for(int i = 0; i < rotator2[1].length; i++)
-		{
-			if(string.equalsIgnoreCase(rotator1[1][i]))
 			{
 				string = reflector1[i];
 				break;
