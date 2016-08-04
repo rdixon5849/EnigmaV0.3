@@ -39,13 +39,14 @@ public class Enigma1
 		{
 			setReversed(false);
 			holder[i] = firstRotator(messageParts[i]);
-			holder[i] = secondRotator(messageParts[i]);
+			holder[i] = secondRotator(holder[i]);
 			holder[i] = reflector1(holder[i]);
 			
 			setReversed(true);
 			holder[i] = secondRotator(holder[i]);
 			holder[i] = firstRotator(holder[i]);
 			System.out.print(holder[i]);
+			
 		}		
 		setEncryptedMsg(holder);
 	}
@@ -57,11 +58,10 @@ public class Enigma1
 		{
 			setReversed(true);
 			holder[i] = firstRotator(messageParts[i]);
-			holder[i] = secondRotator(messageParts[i]);
-			
-			
-			setReversed(false);
+			holder[i] = secondRotator(holder[i]);
 			holder[i] = reflectorIn(holder[i]);
+			
+			setReversed(false);			
 			holder[i] = secondRotator(holder[i]);
 			holder[i] = firstRotator(holder[i]);
 			System.out.print(holder[i]);
@@ -120,14 +120,7 @@ public class Enigma1
 				break;
 			}
 		}	
-		for(int i = 0; i < reflector1.length; i++)
-		{
-			if(string.equalsIgnoreCase(rotator2[0][i]))
-			{
-				string = rotator2[1][i];
-				break;
-			}
-		}
+		
 		return string;
 	}
 	
@@ -136,20 +129,13 @@ public class Enigma1
 		//have to find the place of the string that is called in the array
 		for(int i = 0; i < rotator2[1].length; i++)
 		{
-			if(string.equalsIgnoreCase(rotator2[1][i]))
+			if(string.equalsIgnoreCase(rotator1[1][i]))
 			{
 				string = reflector1[i];
 				break;
 			}
 		}	
-		for(int i = 0; i < reflector1.length; i++)
-		{
-			if(string.equalsIgnoreCase(rotator1[0][i]))
-			{
-				string = rotator1[1][i];
-				break;
-			}
-		}
+		
 		return string;
 	}
 
@@ -165,18 +151,6 @@ public class Enigma1
 		this.isReversed = isReversed;
 	}
 
-
-	public static void main(String[] args)
-	{
-		Scanner keyboard = new Scanner(System.in);
-		System.out.print("Enter a string: ");
-		String message = keyboard.nextLine();
-		Enigma1 en = new Enigma1();
-		en.inputSplitter(message.toUpperCase());
-		keyboard.close();
-	}
-
-
 	public String[] getEncryptedMsg()
 	{
 		return encryptedMsg;
@@ -186,5 +160,15 @@ public class Enigma1
 	public void setEncryptedMsg(String[] encryptedMsg)
 	{
 		this.encryptedMsg = encryptedMsg;
+	}
+	
+	public static void main(String[] args)
+	{
+		Scanner keyboard = new Scanner(System.in);
+		System.out.print("Enter a string: ");
+		String message = keyboard.nextLine();
+		Enigma1 en = new Enigma1();
+		en.inputSplitter(message.toUpperCase());
+		keyboard.close();
 	}
 }
